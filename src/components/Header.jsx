@@ -1,0 +1,20 @@
+function Header() {
+  return (
+    <header className="site-header">
+      <a className="brand" href="#inicio" aria-label="FireBites, inicio">
+        <span className="brand-icon" aria-hidden="true">🔥</span>
+        <span>Fire<span className="brand-highlight">Bites</span></span>
+      </a>
+
+      <nav className="main-nav" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#productos">Productos</a>
+        <a href="#historia">Nuestra historia</a>
+      </nav>
+
+      <a className="header-button" href="#productos">Ver sabores</a>
+    </header>
+  )
+}
+
+export default Header
