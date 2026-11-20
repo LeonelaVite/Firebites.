@@ -56,6 +56,19 @@ La contraseña debe tener al menos 12 caracteres. En la base de datos se guarda 
 
 Sin una URI de MongoDB, el backend puede iniciar para comprobar su estado, pero las funciones que requieren datos indican que MongoDB no está conectado. El chatbot también requiere una clave de Gemini.
 
+## Cómo está organizado el código
+
+- `src/App.jsx` reúne los componentes de la página en el orden en que aparecen.
+- `src/components/` contiene bloques visuales como el encabezado, catálogo, contacto, chat y panel administrativo.
+- `src/services/api.js` contiene `apiRequest`, una función que recibe una ruta y opciones, envía la solicitud HTTP al backend y devuelve los datos JSON. Si el servidor responde con error, devuelve un error que la pantalla puede mostrar.
+- `backend/src/server.js` prepara Express y registra las rutas bajo `/api`.
+- `backend/src/models/` describe los datos que MongoDB guarda para productos, solicitudes y administradores.
+- `backend/src/routes/` contiene las funciones que reciben solicitudes del navegador, validan datos y usan los modelos.
+- `backend/src/middleware/` contiene comprobaciones que protegen las rutas que necesitan una base de datos o una sesión administrativa.
+- `backend/src/scripts/createAdmin.js` crea la cuenta inicial y guarda un hash de su contraseña.
+
+Los componentes de React muestran los estados de carga y resultado. El backend es quien guarda los datos y valida el acceso; la clave de Gemini permanece allí.
+
 ## Comprobaciones locales
 
 Desde la carpeta principal:
