@@ -1,51 +1,56 @@
+import { useEffect, useState } from 'react'
+import apiRequest from '../services/api.js'
 import ProductCard from './ProductCard.jsx'
 
 function FeaturedProducts() {
-  const products = [
-    {
-      name: 'Mango en llamas',
-      description: 'Gomitas suaves con un giro tropical y picantito.',
-      flavor: 'Mango · Chile',
-      level: 'Picor alegre',
-      emoji: '🥭',
-      colorClass: 'mango-card',
-    },
-    {
-      name: 'Fresa explosiva',
-      description: 'Un clásico frutal que llega con mucha personalidad.',
-      flavor: 'Fresa · Limón',
-      level: 'Picor medio',
-      emoji: '🍓',
-      colorClass: 'strawberry-card',
-    },
-    {
-      name: 'Mix sin miedo',
-      description: 'Una mezcla atrevida para quienes buscan más fuego.',
-      flavor: 'Frutas · Chile',
-      level: 'Picor intenso',
-      emoji: '🍬',
-      colorClass: 'mix-card',
-    },
-  ]
+  const [products, setProducts] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const result = await apiRequest('/products')
+        setProducts(result.products)
+      } catch (error) {
+        setErrorMessage(error.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadProducts()
+  }, [])
 
   return (
     <section className="products-section section-wrap" id="productos">
       <div className="section-heading">
         <div>
-          <p className="eyebrow"><span>●</span> Nuestros favoritos</p>
+          <p className="eyebrow"><span>●</span> Catálogo FireBites</p>
           <h2>Pequeños bocados,<br /><span>grandes emociones.</span></h2>
         </div>
         <p className="section-intro">
-          Sabores frutales y un toque picante para hacer cada antojo más divertido.
+          Explora los sabores y niveles de picante disponibles.
         </p>
       </div>
 
-      <div className="product-grid">
-        {products.map((product) => (
-          <ProductCard key={product.name} product={product} />
-        ))}
-      </div>
-      <p className="products-note">Una probadita de lo que hace especial a FireBites <span aria-hidden="true">↗</span></p>
+      {isLoading && <p className="products-message">Cargando productos…</p>}
+      {!isLoading && errorMessage && (
+        <p className="products-message error-message" role="status">{errorMessage}</p>
+      )}
+      {!isLoading && !errorMessage && products.length === 0 && (
+        <p className="products-message">
+          Aún no hay productos publicados. Vuelve pronto para descubrir el catálogo.
+        </p>
+      )}
+
+      {!isLoading && !errorMessage && products.length > 0 && (
+        <div className="product-grid">
+          {products.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
+      )}
     </section>
   )
 }
