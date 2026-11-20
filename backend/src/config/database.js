@@ -5,14 +5,16 @@ async function connectToDatabase() {
 
   if (!databaseUrl) {
     console.log('MONGODB_URI no está configurada; no se intentó conectar a la base de datos.')
-    return
+    return false
   }
 
   try {
     await mongoose.connect(databaseUrl)
     console.log('Conexión con MongoDB verificada.')
+    return true
   } catch {
     console.error('No se pudo verificar la conexión con MongoDB. Revisa MONGODB_URI y el acceso de red de Atlas.')
+    return false
   }
 }
 
