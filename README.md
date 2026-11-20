@@ -88,3 +88,19 @@ npm run build
 6. Cuando el repositorio remoto esté configurado, ejecuta `npm run deploy`. El comando construye la página y publica `dist` en la rama `gh-pages`.
 
 No ejecutes el paso 6 hasta revisar que `VITE_API_URL` y `VITE_BASE_PATH` apunten a los servicios reales. GitHub Pages publica la página; MongoDB y Gemini requieren sus cuentas y claves por separado. No incluyas archivos `.env` en GitHub.
+
+### Servicio de backend en Render
+
+Al crear el servicio web de Render conectado al repositorio, usa:
+
+- Root Directory: `backend`
+- Build Command: `npm install`
+- Start Command: `npm start`
+
+En la sección Environment agrega `NODE_ENV=production`, `FRONTEND_URL` con el origen público del sitio, `MONGODB_URI`, `SESSION_SECRET`, `GEMINI_API_KEY` y `GEMINI_MODEL=gemini-3.8-flash`. Render asigna `PORT`; el servidor ya lo lee automáticamente. La clave de Gemini y la URI de MongoDB van solo en el panel privado de Render.
+
+Después de crear el servicio, consulta su pestaña Connect > Outbound y agrega los rangos de salida indicados a la lista de IP permitidas de Atlas. Evita permitir `0.0.0.0/0`, porque habilita conexiones desde cualquier dirección.
+
+### Compatibilidad de sesiones
+
+GitHub Pages y la URL `onrender.com` pertenecen a sitios distintos. El inicio de sesión usa una cookie segura entre ambos. Safari bloquea por defecto las cookies de terceros; por eso, para que el panel administrativo conserve la sesión de forma fiable en Safari, configura un dominio propio para la página y otro subdominio del mismo dominio para la API (por ejemplo, `www.tudominio.com` y `api.tudominio.com`). Sin dominio propio, prueba la publicación en el navegador previsto para la demostración y confirma el inicio de sesión allí.
