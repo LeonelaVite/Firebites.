@@ -9,10 +9,11 @@ function Header() {
       <nav className="main-nav" aria-label="Navegación principal">
         <a href="#inicio">Inicio</a>
         <a href="#productos">Productos</a>
-        <a href="#historia">Nuestra historia</a>
+        <a href="#historia">Nosotros</a>
+        <a href="#contacto">Contacto</a>
       </nav>
 
-      <a className="header-button" href="#productos">Ver sabores</a>
+      <a className="header-button" href="#asistente">Asistente</a>
     </header>
   )
 }

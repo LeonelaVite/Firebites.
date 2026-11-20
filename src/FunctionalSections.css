@@ -1,0 +1,435 @@
+/* Secciones funcionales de contacto y asistente */
+.functional-section {
+  display: grid;
+  grid-template-columns: 0.9fr 1fr;
+  align-items: start;
+  gap: 70px;
+  padding-top: 86px;
+  padding-bottom: 86px;
+  border-top: 1px solid rgba(255, 247, 240, 0.1);
+}
+
+.functional-heading h2 {
+  margin: 0;
+  color: var(--color-cream);
+  font-size: clamp(34px, 4vw, 50px);
+  line-height: 1.05;
+  letter-spacing: -2px;
+}
+
+.functional-heading h2 span {
+  color: var(--color-orange);
+}
+
+.functional-heading > p:last-child {
+  max-width: 430px;
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.simple-form {
+  display: grid;
+  gap: 16px;
+  padding: 26px;
+  border: 1px solid rgba(255, 247, 240, 0.1);
+  border-radius: 18px;
+  background: var(--color-surface);
+}
+
+.simple-form label {
+  display: grid;
+  gap: 8px;
+  color: #e0d2c9;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.simple-form input,
+.simple-form textarea,
+.chat-form input {
+  width: 100%;
+  border: 1px solid rgba(255, 247, 240, 0.16);
+  border-radius: 9px;
+  padding: 12px 13px;
+  color: var(--color-cream);
+  background: #181210;
+  font: inherit;
+}
+
+.simple-form textarea {
+  resize: vertical;
+}
+
+.simple-form input:focus,
+.simple-form textarea:focus,
+.chat-form input:focus {
+  outline: 2px solid rgba(255, 122, 26, 0.65);
+  outline-offset: 1px;
+}
+
+.simple-form button:disabled,
+.chat-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.form-success,
+.form-error {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.form-success {
+  color: #9fdfab;
+}
+
+.form-error {
+  color: #ffad9c;
+}
+
+.assistant-section {
+  padding: 85px 0;
+  background: #211916;
+}
+
+.assistant-layout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  align-items: start;
+  gap: 60px;
+}
+
+.chat-panel {
+  overflow: hidden;
+  border: 1px solid rgba(255, 247, 240, 0.12);
+  border-radius: 18px;
+  background: #17110f;
+}
+
+.chat-messages {
+  min-height: 270px;
+  max-height: 470px;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 13px;
+  padding: 20px;
+}
+
+.chat-message {
+  max-width: 88%;
+  display: grid;
+  gap: 12px;
+  justify-self: start;
+}
+
+.chat-message.customer {
+  justify-self: end;
+}
+
+.chat-message > p,
+.chat-status {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #e9ddd5;
+  background: #29201c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.chat-message.customer > p {
+  color: #27170f;
+  background: var(--color-orange);
+}
+
+.chat-message .product-card {
+  width: min(100%, 390px);
+}
+
+.chat-message .product-art {
+  min-height: 120px;
+}
+
+.chat-message .product-emoji {
+  font-size: 58px;
+}
+
+.chat-status {
+  color: var(--color-muted);
+  background: transparent;
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border-top: 1px solid rgba(255, 247, 240, 0.1);
+}
+
+.chat-form .button {
+  flex: 0 0 auto;
+  border: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.footer-links a:hover {
+  color: var(--color-cream);
+}
+
+@media (max-width: 760px) {
+  .functional-section,
+  .assistant-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .functional-section {
+    padding-top: 62px;
+    padding-bottom: 62px;
+  }
+
+  .assistant-section {
+    padding: 62px 0;
+  }
+
+  .simple-form {
+    padding: 19px;
+  }
+
+  .footer-links {
+    order: 4;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 430px) {
+  .chat-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .chat-form .button {
+    width: 100%;
+  }
+}
+/* Panel administrativo */
+.admin-section {
+  padding: 82px 0;
+  border-top: 1px solid rgba(255, 247, 240, 0.1);
+}
+
+.admin-login {
+  max-width: 470px;
+  margin-top: 30px;
+}
+
+.admin-login h3,
+.admin-block h3 {
+  margin: 0 0 18px;
+  color: var(--color-cream);
+  font-size: 20px;
+}
+
+.admin-dashboard {
+  margin-top: 30px;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 247, 240, 0.1);
+  border-radius: 14px;
+  background: var(--color-surface);
+}
+
+.admin-toolbar p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.admin-toolbar strong {
+  color: var(--color-cream);
+}
+
+.admin-secondary-button {
+  border: 1px solid rgba(255, 247, 240, 0.2);
+  color: var(--color-cream);
+  background: transparent;
+}
+
+.admin-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.admin-block {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(255, 247, 240, 0.1);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.admin-product-form {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.admin-product-form select,
+.request-status-label select {
+  width: 100%;
+  border: 1px solid rgba(255, 247, 240, 0.16);
+  border-radius: 9px;
+  padding: 11px 12px;
+  color: var(--color-cream);
+  background: #181210;
+  font: inherit;
+}
+
+.admin-form-actions,
+.admin-record-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-subheading {
+  margin-top: 34px !important;
+}
+
+.admin-message {
+  margin: 18px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.admin-record-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-record,
+.admin-request {
+  padding: 15px;
+  border: 1px solid rgba(255, 247, 240, 0.1);
+  border-radius: 12px;
+  background: #181210;
+}
+
+.admin-record {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.admin-record strong,
+.admin-request strong {
+  color: var(--color-cream);
+  font-size: 13px;
+}
+
+.admin-record p,
+.admin-request p {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.admin-record-actions button,
+.admin-danger-button {
+  border: 0;
+  padding: 7px 9px;
+  color: var(--color-orange);
+  background: transparent;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.admin-danger-button {
+  color: #ff8b78;
+}
+
+.admin-request-heading {
+  display: grid;
+  gap: 5px;
+}
+
+.admin-request-heading span {
+  color: var(--color-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.request-status-label {
+  display: grid;
+  flex: 1 1 160px;
+  gap: 6px;
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.admin-feedback {
+  margin-top: 18px;
+}
+
+@media (max-width: 760px) {
+  .admin-section {
+    padding: 62px 0;
+  }
+
+  .admin-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-block {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 430px) {
+  .admin-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-record {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
