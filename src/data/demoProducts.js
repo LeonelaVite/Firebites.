@@ -1,0 +1,40 @@
+const demoProducts = [
+  {
+    id: 'demo-mango',
+    name: 'Mango en llamas',
+    description: 'Gomitas suaves con un giro tropical y picantito.',
+    flavor: 'Mango · Chile',
+    spiceLevel: 'Suave',
+    emoji: '🥭',
+    colorClass: 'mango-card',
+    price: 3,
+    currency: 'USD',
+    isDemoProduct: true,
+  },
+  {
+    id: 'demo-fresa',
+    name: 'Fresa explosiva',
+    description: 'Un clásico frutal que llega con mucha personalidad.',
+    flavor: 'Fresa · Limón',
+    spiceLevel: 'Medio',
+    emoji: '🍓',
+    colorClass: 'strawberry-card',
+    price: 3.5,
+    currency: 'USD',
+    isDemoProduct: true,
+  },
+  {
+    id: 'demo-mix',
+    name: 'Mix sin miedo',
+    description: 'Una mezcla atrevida para quienes buscan más fuego.',
+    flavor: 'Frutas · Chile',
+    spiceLevel: 'Intenso',
+    emoji: '🍬',
+    colorClass: 'mix-card',
+    price: 4.5,
+    currency: 'USD',
+    isDemoProduct: true,
+  },
+]
+
+export default demoProducts

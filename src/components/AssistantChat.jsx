@@ -1,14 +1,15 @@
 import { useState } from 'react'
+import getDemoAssistantReply from '../services/demoAssistant.js'
 import apiRequest from '../services/api.js'
 import ProductCard from './ProductCard.jsx'
 
-function AssistantChat() {
+function AssistantChat({ products, cartItems, recentOrders, onAddToCart }) {
   const [question, setQuestion] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      text: '¡Hola! Cuéntame qué sabores o nivel de picante prefieres y buscaré opciones del catálogo.',
+      text: '¡Hola! Pregúntame por sabores, precios, tu carrito o solicitudes de pedido.',
       products: [],
     },
   ])
@@ -31,22 +32,43 @@ function AssistantChat() {
     try {
       const result = await apiRequest('/assistant', {
         method: 'POST',
-        body: { message: customerQuestion },
+        body: { message: customerQuestion, cartItems, recentOrders },
       })
+
+      if (typeof result.reply !== 'string' || !result.reply.trim()) {
+        throw new Error('El asistente no envió una respuesta.')
+      }
 
       setMessages((currentMessages) => [
         ...currentMessages,
         {
           role: 'assistant',
           text: result.reply,
-          products: result.products,
+          products: Array.isArray(result.products) ? result.products : [],
         },
       ])
-    } catch (error) {
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        { role: 'assistant', text: error.message, products: [] },
-      ])
+    } catch {
+      try {
+        const localReply = getDemoAssistantReply(
+          customerQuestion,
+          products,
+          cartItems,
+          recentOrders,
+        )
+        setMessages((currentMessages) => [
+          ...currentMessages,
+          { role: 'assistant', ...localReply },
+        ])
+      } catch {
+        setMessages((currentMessages) => [
+          ...currentMessages,
+          {
+            role: 'assistant',
+            text: 'No pude responder en este momento. Revisa el catálogo o vuelve a intentarlo más tarde.',
+            products: [],
+          },
+        ])
+      }
     } finally {
       setIsSending(false)
     }
@@ -58,7 +80,7 @@ function AssistantChat() {
         <div className="functional-heading">
           <p className="eyebrow"><span>●</span> FireBites Assistant</p>
           <h2>Encuentra tu<br /><span>próximo antojo.</span></h2>
-          <p>El asistente usa el catálogo disponible para recomendar productos según tus gustos.</p>
+          <p>Consulta sabores, precios, el carrito y tus solicitudes de pedido. Hay respuestas locales si Gemini o el backend no están disponibles.</p>
         </div>
 
         <div className="chat-panel">
@@ -67,7 +89,11 @@ function AssistantChat() {
               <div className={`chat-message ${message.role}`} key={`${message.role}-${index}`}>
                 <p>{message.text}</p>
                 {message.products.map((product) => (
-                  <ProductCard key={product.id || product._id} product={product} />
+                  <ProductCard
+                    key={product.id || product._id || product.name}
+                    product={product}
+                    onAddToCart={onAddToCart}
+                  />
                 ))}
               </div>
             ))}

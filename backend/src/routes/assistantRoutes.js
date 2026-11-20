@@ -1,11 +1,13 @@
 import { Router } from 'express'
+import mongoose from 'mongoose'
 import { GoogleGenAI } from '@google/genai'
+import demoProducts from '../../../src/data/demoProducts.js'
+import getDemoAssistantReply, { getConfirmedProductInfo } from '../../../src/services/demoAssistant.js'
 import Product from '../models/Product.js'
-import requireDatabase from '../middleware/requireDatabase.js'
 
 const router = Router()
 
-router.post('/', requireDatabase, async (request, response) => {
+router.post('/', async (request, response) => {
   const message = typeof request.body.message === 'string'
     ? request.body.message.trim()
     : ''
@@ -16,62 +18,70 @@ router.post('/', requireDatabase, async (request, response) => {
     })
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return response.status(503).json({
-      message: 'El asistente todavía no está configurado.',
+  let products = demoProducts
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const databaseProducts = await Product.find({ active: true }).select(
+        'name price',
+      )
+      if (databaseProducts.length > 0) {
+        products = databaseProducts
+      }
+    } catch {
+      products = demoProducts
+    }
+  }
+
+  const catalog = products.map((product) => ({
+    id: String(product._id || product.id),
+    name: product.name,
+    price: Number(product.price),
+    currency: 'USD',
+  }))
+  const localReply = getDemoAssistantReply(
+    message,
+    catalog,
+    request.body.cartItems,
+    request.body.recentOrders,
+  )
+
+  if (localReply.handled || !process.env.GEMINI_API_KEY) {
+    return response.json({
+      reply: localReply.reply,
+      products: localReply.products,
+      source: 'local',
     })
   }
 
+  const confirmedCatalog = catalog.map((product) => ({
+    ...product,
+    confirmedProductDetails: getConfirmedProductInfo(product)?.description || null,
+  }))
+
   try {
-    const products = await Product.find({ active: true }).select(
-      'name description flavor spiceLevel price',
-    )
-
-    if (products.length === 0) {
-      return response.json({
-        reply: 'Todavía no hay productos publicados para recomendar.',
-        products: [],
-      })
-    }
-
-    const catalog = products.map((product) => ({
-      id: product._id.toString(),
-      name: product.name,
-      description: product.description,
-      flavor: product.flavor,
-      spiceLevel: product.spiceLevel,
-      price: product.price,
-    }))
-
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
     const result = await ai.models.generateContent({
       model: process.env.GEMINI_MODEL || 'gemini-3.8-flash',
-      contents: `Catálogo disponible: ${JSON.stringify(catalog)}\n\nPregunta del cliente: ${message}`,
+      contents: `Catálogo actual de FireBites: ${JSON.stringify(confirmedCatalog)}\nPregunta del cliente: ${message}`,
       config: {
         systemInstruction:
-          'Eres FireBites Assistant. Elige productos del catálogo que coincidan con lo que pide el cliente. No inventes productos, sabores, niveles de picante ni precios. Devuelve únicamente los identificadores del catálogo, separados por comas. Si ninguno coincide, devuelve NONE.',
+          'Responde en español con tono amable y natural. Solo puedes usar los datos confirmados del catálogo. No inventes ingredientes, marcas, alérgenos, niveles de picante, productos ni precios. Si preguntan por ingredientes, alérgenos o intensidad exacta del picante, explica que esa información no está confirmada. No afirmes que se realizó un pago.',
       },
     })
+    const reply = (result.text || '').trim()
 
-    const validIds = new Set(catalog.map((product) => product.id))
-    const selectedIds = (result.text || '')
-      .split(',')
-      .map((id) => id.trim())
-      .filter((id) => validIds.has(id))
-
-    const recommendations = catalog.filter((product) => selectedIds.includes(product.id))
-
-    response.json({
-      reply: recommendations.length
-        ? 'Estas opciones de nuestro catálogo podrían gustarte:'
-        : 'No encontré una opción clara. Prueba indicando un sabor o nivel de picante.',
-      products: recommendations,
-    })
+    if (reply) {
+      return response.json({ reply, products: [], source: 'gemini' })
+    }
   } catch {
-    response.status(502).json({
-      message: 'El asistente no está disponible en este momento.',
-    })
+    // Si Gemini no responde, se conserva una respuesta útil desde el catálogo local.
   }
+
+  return response.json({
+    reply: localReply.reply,
+    products: localReply.products,
+    source: 'local',
+  })
 })
 
 export default router

@@ -1,4 +1,4 @@
-function Header() {
+function Header({ cartQuantity }) {
   return (
     <header className="site-header">
       <a className="brand" href="#inicio" aria-label="FireBites, inicio">
@@ -10,10 +10,9 @@ function Header() {
         <a href="#inicio">Inicio</a>
         <a href="#productos">Productos</a>
         <a href="#historia">Nosotros</a>
-        <a href="#contacto">Contacto</a>
       </nav>
 
-      <a className="header-button" href="#asistente">Asistente</a>
+      <a className="header-button" href="#pedido-demo">Carrito ({cartQuantity})</a>
     </header>
   )
 }

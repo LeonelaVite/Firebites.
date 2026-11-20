@@ -27,3 +27,26 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Private keys and private certificate containers
+*.pem
+*.key
+*.p12
+*.pfx
+*.p7b
+*.p7c
+*.jks
+*.keystore
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+
+# Local authentication files
+.npmrc
+!.npmrc.example
+credentials*.json
+service-account*.json
+
+# Local order records contain customer information
+backend/data/
