@@ -57,6 +57,6 @@ app.use('/api/assistant', assistantRoutes)
 
 connectToDatabase()
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Servidor FireBites activo en http://localhost:${port}`)
 })
