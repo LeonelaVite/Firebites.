@@ -184,6 +184,15 @@
   white-space: nowrap;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 3px;
+}
+
 .footer-links {
   display: flex;
   gap: 16px;
